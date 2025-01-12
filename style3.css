@@ -37,13 +37,27 @@ div{
     height:50px;
     background: #dcdcdc;
     padding: 8px;
-    text-align: right;
-    color: #333333;
     border: 1px solid #c0c0c0;
+    flex: 0.2;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+#expressionDisplay, #resultDisplay{
     font-family: Roboto, sans-serif;
     font-weight: bold;
     font-size: 1.5em;
-    flex: 0.2;
+    /* max-width: 500px; */
+    text-align: right;
+    color: #333333;
+    flex: 1;
+    background-color: white;
+    display: flex;
+}
+#expressionSpan{
+    word-wrap: break-word;
+    width: 445px;
 }
 
 #scientificFunctionPanel{
@@ -103,12 +117,12 @@ div{
 .numberButton:hover{
     background: #cba135;
     color: white;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.15s, color 0.15s;
     
 }
 .operatorButton:hover{
     background: #a33a2c;
     color: white;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.15s, color 0.15s;
 
 }

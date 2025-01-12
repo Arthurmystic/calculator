@@ -10,42 +10,48 @@
 
 <body>
     <div id='calculatorFrame'>
-        <div id="displayPanel"></div> <!-- screen for display -->
+        <div id="displayPanel"> <!-- screen for display -->
+            <div id="expressionDisplay">
+                <span id='expressionSpan'>  </span>
+            </div>
+            <div id="resultDisplay"></div>
+        </div> 
         <div id="scientificFunctionPanel"></div> <!-- Has Scientific functions eg sin, cos, log etc -->
         <div id="mainInputPanel">
             <div id="numberPanel"> <!-- Has numeric buttons -->
                 <div id="utilityRow" class="numberButtonRow"> <!-- %, del, clear -->
-                    <button id="percent" data-set="%" class="numberButton"> % </button>
-                    <button id="delete" data-set="DEL" class="numberButton"> DEL </button>
-                    <button id="clear" data-set="Clear" class="numberButton"> Clear </button>
+                    <button id="percent" data-value="%" class="numberButton"> % </button>
+                    <button id="delete" data-value="DEL" class="numberButton"> DEL </button>
+                    <button id="clear" data-value="Clear" class="numberButton"> Clear </button>
                 </div>
                 <div id="topNumberRow" class="numberButtonRow"> <!-- 7, 8, 9 -->
-                    <button id="seven" data-set="7" class="numberButton"> 7 </button>
-                    <button id="eight" data-set="8" class="numberButton"> 8 </button>
-                    <button id="nine" data-set="9" class="numberButton"> 9 </button>
+                    <button id="seven" data-value="7" class="numericButton numberButton"> 7 </button>
+                    <button id="eight" data-value="8" class="numericButton numberButton"> 8 </button>
+                    <button id="nine" data-value="9" class="numericButton numberButton"> 9 </button>
                 </div>
-                <div id="middleNumberRow" class="numberButtonRow"> <!-- 4, 5, 6 -->
-                    <button id="four" data-set="4" class="numberButton"> 4 </button>
-                    <button id="five" data-set="5" class="numberButton"> 5 </button>
-                    <button id="six" data-set="6" class="numberButton"> 6 </button>
+                <div id="middleNumberRow" class="number numberButtonRow"> <!-- 4, 5, 6 -->
+                    <button id="four" data-value="4" class="numericButton numberButton"> 4 </button>
+                    <button id="five" data-value="5" class="numericButton numberButton"> 5 </button>
+                    <button id="six" data-value="6" class="numericButton numberButton"> 6 </button>
                 </div>
-                <div id="bottomNumberRow" class="numberButtonRow"><!-- 1, 2, 3 -->
-                    <button id="one" data-set="1" class="numberButton"> 1 </button>
-                    <button id="two" data-set="2" class="numberButton"> 2 </button>
-                    <button id="three" data-set="3" class="numberButton"> 3 </button>
+                <div id="bottomNumberRow" class="number numberButtonRow"><!-- 1, 2, 3 -->
+                    <button id="one" data-value="1" class="numericButton numberButton"> 1 </button>
+                    <button id="two" data-value="2" class="numericButton numberButton"> 2 </button>
+                    <button id="three" data-value="3" class="numericButton numberButton"> 3 </button>
                 </div>
+            
                 <div id="specialNumberRow" class="numberButtonRow"> <!-- pi, 0, . -->
-                    <button id="pi" data-set="π" class="numberButton"> π </button>
-                    <button id="0" data-set="0" class="numberButton"> 0 </button>
-                    <button id="point" data-set="." class="numberButton"> . </button>
+                    <button id="pi" data-value="π" class="numberButton"> π </button>
+                    <button id="0" data-value="0" class="numericButton numberButton"> 0 </button>
+                    <button id="point" data-value="." class="numberButton"> . </button>
                 </div>
             </div>
             <div id="operatorPanel"> <!-- Has main operators -->
-                <button id="division" data-set="÷" class="operatorButton"> ÷ </button>
-                <button id="multiplication" data-set="*" class="operatorButton"> x </button>
-                <button id="plus" data-set="+" class="operatorButton"> + </button>
-                <button id="minus" data-set="-" class="operatorButton"> - </button>
-                <button id="equals" data-set="=" class="operatorButton"> = </button>
+                <button id="division" data-value="÷" class="operatorButton"> ÷ </button>
+                <button id="multiplication" data-value="*" class="operatorButton"> x </button>
+                <button id="plus" data-value="+" class="operatorButton"> + </button>
+                <button id="minus" data-value="-" class="operatorButton"> - </button>
+                <button id="equals" data-value="=" class="operatorButton"> = </button>
             </div>
         </div>
     </div>
