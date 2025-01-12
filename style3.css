@@ -17,7 +17,7 @@ body{
 }
 div{
     display: flex;
-    border: 2px solid #dee2e6;
+    /* border: 1px solid #dee2e6; */
     border-radius: 8px;
     /* flex: 1 1 0; */
 }
@@ -36,6 +36,8 @@ div{
 #displayPanel{
     height:50px;
     background: #dcdcdc;
+    padding: 8px;
+    text-align: right;
     color: #333333;
     border: 1px solid #c0c0c0;
     font-family: Roboto, sans-serif;
@@ -46,7 +48,8 @@ div{
 
 #scientificFunctionPanel{
     height:200px;
-    background: #f8f9fa;
+    background: linear-gradient(to bottom, #f8f9fa, #e6e6e6);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     color: #007bff;
     border: 2px solid #dcdcdc;
     flex: 0.4;
@@ -66,18 +69,46 @@ div{
 #numberPanel{
     flex: 5;
     background: white;
-    color: #333333;
     /* border: 2px solid #dcdcdc; */
+    display: flex;
+    flex-direction: column;
 }
 #numberPanel:hover{
     background: #ffd700;
 }
 #operatorPanel {
     flex: 1;
-    background: #e6e6e6;
-    color: #333333;
-    border: 2px solid #dee2e6;
+    background: white;
+    /* border: 2px solid #dee2e6; */
+    display: flex;
+    flex-direction: column;
 }
 #operatorPanel:hover{
     background: #ffd700;
+    transition: background-color 0.3s,
+}
+
+.numberButtonRow{
+    flex: 1;
+    /* border: 1px solid blue; */
+    display: flex;
+}
+.numberButton, .operatorButton{
+    flex: 1;
+    font-size: 1.5em;
+    color: #333333;
+    border: 1px solid #c0c0c0;
+    margin: 4px;
+}
+.numberButton:hover{
+    background: #cba135;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+    
+}
+.operatorButton:hover{
+    background: #a33a2c;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+
 }
