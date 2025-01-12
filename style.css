@@ -1,0 +1,74 @@
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    /* border: 2px solid black; */
+    /* margin: 10px; */
+}
+div{
+    display: flex;
+    border: 2px solid orange;
+    border-radius: 5px;
+    /* flex: 1 1 0; */
+}
+
+#calculatorFrame{
+    max-width: 500px;
+    border: 5px solid #FF8C42;
+    background: linear-gradient(135deg, #FF6F61, #FFD36E);
+    /* min-height: 300px; */
+    gap: 10px;
+    padding: 10px;
+    flex-direction: column;
+    flex: 1;
+    
+}
+#displayPanel{
+    height:50px;
+    background: #1E90FF;
+    color: white;
+    border: 1px solid limegreen;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    flex: 0.2;
+}
+
+#scientificFunctionPanel{
+    height:200px;
+    background: linear-gradient(135deg, #7B1FA2, #9C27B0);
+    color: #FFEB3B;
+    border: 2px solid #FF4081;
+    flex: 0.4;
+}
+#mainInputPanel{
+    height: 450px;
+    flex: 1;
+    gap: 10px;
+    /* border: 2px solid greenyellow; */
+}
+#numberPanel{
+    flex: 5;
+    background: #00E5FF;
+    color: #1B1B1B;
+    border: 2px solid #00897B;
+}
+#numberPanel:hover{
+    background: #00BCD4;
+}
+#operatorPanel {
+    flex: 1;
+    background: linear-gradient(135deg, #FF5722, #F44336);
+    color: white;
+
+    border: 2px solid #FFC107;
+}
