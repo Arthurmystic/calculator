@@ -1,20 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PocketCalculator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style3.css">
 </head>
+
 <body>
-    <div id='calculatorFrame'> 
+    <div id='calculatorFrame'>
         <div id="displayPanel"></div> <!-- screen for display -->
         <div id="scientificFunctionPanel"></div> <!-- Has Scientific functions eg sin, cos, log etc -->
         <div id="mainInputPanel">
-            <div id="numberPanel"></div> <!-- Has numeric buttons -->
+            <div id="numberPanel"> <!-- Has numeric buttons -->
+                <div id="numRow1"></div> <!-- %, del, clear -->
+                <div id="numRow2"></div> <!-- 7, 8, 9 -->
+                <div id="numRow3"></div> <!-- 4, 5, 6 -->
+                <div id="numRow4"></div> <!-- 1, 2, 3 -->
+                <div id="numRow5"></div> <!-- pi, 0, . -->
+            </div>
             <div id="operatorPanel"></div> <!-- Has main operators -->
-        </div> 
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>
