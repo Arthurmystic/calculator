@@ -7,6 +7,8 @@ expressionSpan.textContent = ''; // Initializes the display for the expression b
 const resultSpan = document.querySelector('#resultSpan');
 resultSpan.textContent = ''; // Initializes the result display
 
+const toggleSign = document.querySelector('#toggleSign');
+
 let currentNumberHolder = ''; // Holds the current number being entered (e.g., "25.3")
 let expressionTracker = ''; // Tracks the entire expression for evaluation and display
 
@@ -62,13 +64,7 @@ function getNumericInput(e) {
     let dataValue = e.target.dataset.value;
 
     // Reset the calculator if '=' was pressed before entering a new number
-    if (equalSignClicked && postEqualReset) {
-        expressionSpan.textContent = ''; // Clear the expression display
-        resultSpan.textContent = ''; // Clear the result display
-        expressionTracker = ''; // Reset the expression tracker
-        postEqualReset = false;
-        equalSignClicked = false;
-    }
+    if (equalSignClicked && postEqualReset) ResetCalcOnEquals('', '', '');
 
     // Handle numeric and decimal inputs
     if (!isNaN(dataValue) || ((dataValue === '.') && (!currentNumberHolder.includes('.')))) {
@@ -87,22 +83,20 @@ function getNumericInput(e) {
         currentNumberHolder = ''; // Reset the current number holder
         resultSpan.textContent = ''; // Clear the result display
         expressionTracker = ''; // Reset the expression tracker
+
+    } else if (dataValue === '+/-') {
+        toggleSignValue();
     }
 }
 
 // Function to handle operator input and process the expression when '=' is pressed
 function processOperatorAction(e) {
     let dataValue = e.target.dataset.value;
+    numCounter = 0;
 
     // Reset the calculator if '=' was pressed before entering a new operator
-    if (equalSignClicked && postEqualReset) {
-        resultSpan.textContent = ''; // Clear the result display
-        expressionSpan.textContent = finalResult; // Display the last computed result
-        expressionTracker = finalResult; // Use the last result as the starting point
-        expressionTracker += dataValue; // Append the new operator to the expression
-        postEqualReset = false;
-        equalSignClicked = false;
-    }
+    if (equalSignClicked && postEqualReset) ResetCalcOnEquals(finalResult, '', finalResult + dataValue)
+    // Update expressionTracker with the last finalResult as the starting point and Append the new operator (dataValue) to the expression
 
     // Handle operator input
     if (['+', '-', '*', '/'].includes(dataValue) && !postEqualReset) {
@@ -119,13 +113,34 @@ function processOperatorAction(e) {
         let expressionTrackerArray = expressionTracker.split(/([-/+*])/); // Split the expression into operators and operands
         expressionTrackerArray = expressionTrackerArray.map((val) => (isNaN(Number(val)) ? val : Number(val))); // Convert operands to numbers
         finalResult = processExpression(expressionTrackerArray); // Compute the result
-        finalResult = finalResult.toFixed(4); // round off to 4 decimals
+        finalResult = finalResult.toFixed(2); // round off to 4 decimals
         resultSpan.textContent = finalResult; // Display the result
         equalSignClicked = true; // Mark that '=' has been pressed
         postEqualReset = true; // Allow resetting after '=' is pressed
     }
 }
 
+function toggleSignValue() {
+    expressionTracker = expressionTracker.slice(0, -currentNumberHolder.length);
+    if (currentNumberHolder.at(0) !== '-') {
+        currentNumberHolder = '-'.concat(currentNumberHolder);
+    } else if (currentNumberHolder.at(0) === '-') {
+        currentNumberHolder = currentNumberHolder.slice(1);
+    }
+    expressionTracker += currentNumberHolder;
+    expressionSpan.textContent = expressionTracker;
+}
+
+function ResetCalcOnEquals(expSpanText, resultText, expTrackerUpdate) {
+    expressionSpan.textContent = expSpanText;
+    resultSpan.textContent = resultText;
+    expressionTracker = expTrackerUpdate;
+    postEqualReset = false;
+    equalSignClicked = false;
+}
+
 // Add event listeners for numeric and operator inputs
 numberPanel.addEventListener('click', getNumericInput);
 operatorPanel.addEventListener('click', processOperatorAction);
+
+// toggleSign.addEventListener('click',toggleSignValue);
