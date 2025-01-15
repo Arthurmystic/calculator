@@ -1,176 +1,131 @@
-const numberPanel = document.querySelector('#numberPanel'); // Number buttons panel
-const operatorPanel = document.querySelector('#operatorPanel'); // Operator buttons panel
+const numberPanel = document.querySelector('#numberPanel'); // Panel containing numeric and special keys (like DEL and Clear)
+const operatorPanel = document.querySelector('#operatorPanel'); // Panel containing operator keys
 
 const expressionSpan = document.querySelector('#expressionSpan');
-expressionSpan.textContent = ''; // Initialize the expression display
+expressionSpan.textContent = ''; // Initializes the display for the expression being entered
 
 const resultSpan = document.querySelector('#resultSpan');
-resultSpan.textContent = ''; // Initialize the result display
+resultSpan.textContent = ''; // Initializes the result display
 
-const equalsButton = document.querySelector('#equals'); 
+let currentNumberHolder = ''; // Holds the current number being entered (e.g., "25.3")
+let expressionTracker = ''; // Tracks the entire expression for evaluation and display
 
-let rawExpression = ''; // Stores the current input expression
-let expressionTracker = ''; // Tracks the entire expression for display
-let arrayMat = []; // Array to store raw expression components for evaluation
-
-let numberPanelClicked;
-let equalSignClicked;
-let result;
+let finalResult;   // Stores the result of the evaluated expression
+let equalSignClicked = false;  // Tracks if the equal sign has been pressed
+let postEqualReset = false;  // Indicates if the calculator is ready for a new input after pressing '='
 
 // Function to perform basic arithmetic operations
 function operate(a, operator, b) {
-    let ans = (operator === '+') ? a + b :
-                (operator === '-') ? a - b :
-                (operator === '*') ? a * b :
-                (operator === '/') ? a / b :
-                undefined;
-    return ans;
+    let ans = {
+        '+': (a, b) => a + b,
+        '-': (a, b) => a - b,
+        '*': (a, b) => a * b,
+        '/': (a, b) => a / b,
+    };
+    return ans[operator](a, b); // Dynamically calls the corresponding operation
 }
 
-// Function to evaluate a single operation within the expression
+// Function to evaluate a single operation in the expression
 function evaluateSingleOperation(operator, operatorIndex, array) {
-    const valBefore = array[operatorIndex - 1]; // Left operand
-    const valAfter = array[operatorIndex + 1]; // Right operand
-    const answer = operate(valBefore, operator, valAfter); // Calculate the result
-    array.splice(operatorIndex - 1, 3, answer); // Replace the operation in the array with the result
+    const valBefore = array[operatorIndex - 1]; // Operand before the operator
+    const valAfter = array[operatorIndex + 1]; // Operand after the operator
+    const answer = operate(valBefore, operator, valAfter); // Compute result
+    array.splice(operatorIndex - 1, 3, answer); // Replace the operation and operands with the result
     return answer;
 }
 
-// Function to process the full expression by handling operator precedence
+// Function to process the entire expression, respecting operator precedence
 function processExpression(array) {
     if (array.length > 0) {
-        // Process multiplication and division first
+        // Handle multiplication and division first
         array.forEach((item, index, array) => {
             if (item === '*' || item === '/') {
                 evaluateSingleOperation(item, index, array);
-                processExpression(array); // Recurse to handle remaining operations
+                processExpression(array); // Recursively process remaining operations
             }
         });
 
-        // Process addition and subtraction
+        // Handle addition and subtraction
         array.forEach((item, index, array) => {
             if (item === '+' || item === '-') {
                 evaluateSingleOperation(item, index, array);
-                processExpression(array); // Recurse to handle remaining operations
+                processExpression(array); // Recursively process remaining operations
             }
         });
-        return array[0]; // Return the final result after all operations
+
+        return array[0]; // Return the final computed result
     }
 }
 
-// Function to handle numeric input and update the expression
+// Function to handle numeric input and update the display
 function getNumericInput(e) {
     let dataValue = e.target.dataset.value;
-    
-    // If the input is a number or a decimal point (and no decimal already entered)
-    if (!isNaN(dataValue) || ((dataValue === '.') && (!rawExpression.includes('.')))) {
-        console.log(`typeof datavale=ue ${!isNaN(dataValue)}`);
-        expressionSpan.textContent += dataValue; // Append to raw expression
-        rawExpression += dataValue; // Append to raw expression
-        expressionTracker += dataValue; 
+
+    // Reset the calculator if '=' was pressed before entering a new number
+    if (equalSignClicked && postEqualReset) {
+        expressionSpan.textContent = ''; // Clear the expression display
+        resultSpan.textContent = ''; // Clear the result display
+        expressionTracker = ''; // Reset the expression tracker
+        postEqualReset = false;
+        equalSignClicked = false;
+    }
+
+    // Handle numeric and decimal inputs
+    if (!isNaN(dataValue) || ((dataValue === '.') && (!currentNumberHolder.includes('.')))) {
+        expressionSpan.textContent += dataValue; // Append to the display
+        currentNumberHolder += dataValue; // Update the current number holder
+        expressionTracker += dataValue; // Append to the expression tracker
 
     } else if (dataValue === 'DEL') { // Handle delete action
-        rawExpression = rawExpression.slice(0, -1);
-        expressionTracker = expressionTracker.slice(0, -1);
-        expressionSpan.textContent = expressionTracker;
+        currentNumberHolder = currentNumberHolder.slice(0, -1); // Remove last character from the current number
+        expressionTracker = expressionTracker.slice(0, -1); // Remove last character from the expression tracker
+        expressionSpan.textContent = expressionTracker; // Update the display
+        resultSpan.textContent = ''; // Clear the result display
 
     } else if (dataValue === 'Clear') { // Handle clear action
-        expressionSpan.textContent = ''; // Clear the display
-        rawExpression = ''; // Reset raw expression
+        expressionSpan.textContent = ''; // Clear the expression display
+        currentNumberHolder = ''; // Reset the current number holder
         resultSpan.textContent = ''; // Clear the result display
-        console.log(rawExpression); // Log for debugging
-        expressionTracker = '';
-    } 
+        expressionTracker = ''; // Reset the expression tracker
+    }
 }
 
-// Function to handle operator input and calculate result on pressing '='
+// Function to handle operator input and process the expression when '=' is pressed
 function processOperatorAction(e) {
     let dataValue = e.target.dataset.value;
 
-    console.log(`RE ${rawExpression}`)
-    // expressionTracker += rawExpression; // Add current input to tracker
-    //arrayMat.push(rawExpression); // Add current input to array for evaluation
+    // Reset the calculator if '=' was pressed before entering a new operator
+    if (equalSignClicked && postEqualReset) {
+        resultSpan.textContent = ''; // Clear the result display
+        expressionSpan.textContent = finalResult; // Display the last computed result
+        expressionTracker = finalResult; // Use the last result as the starting point
+        expressionTracker += dataValue; // Append the new operator to the expression
+        postEqualReset = false;
+        equalSignClicked = false;
+    }
 
-    if (['+', '-', '*', '/'].includes(dataValue)) { // Handle operator input
-    expressionTracker += dataValue; // Update tracker with operator
-    
-    arrayMat.push(rawExpression);
-    arrayMat.push(dataValue); // Add operator to array
-    rawExpression = ''; // Reset raw expression
-    expressionSpan.textContent = expressionTracker; // Update display
-    
-    
-    }else if (dataValue === '=') { // Handle equality ('=') for evaluation
-        let expressionTrackerArray = expressionTracker.split(/([-/+*])/)
-        expressionTrackerArray = expressionTrackerArray.map((val) => (isNaN(Number(val)) ? val : Number(val)));
-        console.log(`final xpression: ${expressionTrackerArray}`)
-        let ans2 = processExpression(expressionTrackerArray);
-        
-        console.log(`finAns ${ans2}`);
-
-           /* // Convert array values to numbers (if applicable)
-            arrayMat = arrayMat.map((val) => (isNaN(Number(val)) ? val : Number(val)));
-            result = processExpression(arrayMat); // Process and calculate result
-            console.log(`result type ${typeof result}`);
-            
-            resultSpan.textContent = result; // Display result
-            equalSignClicked = true;
-            arrayMat = [];
-            result = '';
-            // numberPanelClicked = false;
-            */
-            
+    // Handle operator input
+    if (['+', '-', '*', '/'].includes(dataValue) && !postEqualReset) {
+        if (['+', '-', '*', '/'].includes(expressionTracker.slice(-1))) {
+            // Replace the last operator if an operator is already at the end
+            expressionTracker = expressionTracker.slice(0, -1) + dataValue;
+        } else {
+            expressionTracker += dataValue; // Append the operator to the expression
         }
-    // console.log(`arraymat in operator ${arrayMat}`);
-    // console.log(`rawExpression in operator ${rawExpression}`);
-    // console.log(expressionTracker);
-};
+        currentNumberHolder = ''; // Reset the current number holder
+        expressionSpan.textContent = expressionTracker; // Update the display
 
-function checkEqualsPressed (e) {
-    // Convert array values to numbers (if applicable)
-    console.log(`arraymat in equals ${arrayMat}`)
-    arrayMat = arrayMat.map((val) => (isNaN(Number(val)) ? val : Number(val)));
-    result = processExpression(arrayMat); // Process and calculate result
-    console.log(`result type ${typeof result}`);
-    
-    resultSpan.textContent = result; // Display result
-    equalSignClicked = true;
-    arrayMat = [];
-   // result = '';
-    // numberPanelClicked = false;
+    } else if (dataValue === '=' && !equalSignClicked) { // Handle '=' for evaluation
+        let expressionTrackerArray = expressionTracker.split(/([-/+*])/); // Split the expression into operators and operands
+        expressionTrackerArray = expressionTrackerArray.map((val) => (isNaN(Number(val)) ? val : Number(val))); // Convert operands to numbers
+        finalResult = processExpression(expressionTrackerArray); // Compute the result
+        finalResult = finalResult.toFixed(4); // round off to 4 decimals
+        resultSpan.textContent = finalResult; // Display the result
+        equalSignClicked = true; // Mark that '=' has been pressed
+        postEqualReset = true; // Allow resetting after '=' is pressed
+    }
 }
 
-function checkIfNumberPressedAfterEquals(e){
-    if (equalSignClicked === true & numberPanelClicked === true){
-        console.log('now eval...');
-        let dataValue = e.target.dataset.value;
-        expressionTracker = '';
-        rawExpression = result;
-        result= '';
-        expressionSpan.innerHTML = '';
-        resultSpan.innerHTML = '';
-        equalSignClicked = false;
-        numberPanelClicked = false;
-
-    }
-   /* if eq pressed is true and a numberpanel pressed, reset all. and seteuql
-    presed to false. wen i click equ, numberpanel set to false, when click number pane, it is set to true
-    if equ pressed is true, and operator panel pressed, empty everything but
-    set rawExpression to be equal to result. */
- }
-
-//console.log(expressionSpan);
-// Add event listeners for numeric and operator input
-numberPanel.addEventListener('click', (e) => {
-   // checkIfNumberPressedAfterEquals(e);
-    getNumericInput(e);
-    console.log (expressionTracker);
-    numberPanelClicked = true;
-});
-
+// Add event listeners for numeric and operator inputs
+numberPanel.addEventListener('click', getNumericInput);
 operatorPanel.addEventListener('click', processOperatorAction);
-
-equalsButton.addEventListener('click', ()=>{
-   // equalSignClicked = true;
-    //checkEqualsPressed();
-});
