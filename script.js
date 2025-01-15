@@ -1,11 +1,11 @@
-const numberPanel = document.querySelector('#numberPanel'); // Panel containing numeric and special keys (like DEL and Clear)
-const operatorPanel = document.querySelector('#operatorPanel'); // Panel containing operator keys
+const numberPanel = document.querySelector('#numberPanel'); // Contains numeric and special keys (like DEL and Clear)
+const operatorPanel = document.querySelector('#operatorPanel'); // Contains operator keys
 
 const expressionSpan = document.querySelector('#expressionSpan');
-expressionSpan.textContent = ''; // Initializes the display for the expression being entered
+expressionSpan.textContent = ''; // display equation being entered in realtime
 
 const resultSpan = document.querySelector('#resultSpan');
-resultSpan.textContent = ''; // Initializes the result display
+resultSpan.textContent = ''; // resultDisplay displays results
 
 const toggleSign = document.querySelector('#toggleSign');
 
@@ -14,7 +14,6 @@ let expressionTracker = ''; // Tracks the entire expression for evaluation and d
 
 let finalResult;   // Stores the result of the evaluated expression
 let equalSignClicked = false;  // Tracks if the equal sign has been pressed
-let postEqualReset = false;  // Indicates if the calculator is ready for a new input after pressing '='
 
 // Function to perform basic arithmetic operations
 function operate(a, operator, b) {
@@ -54,7 +53,6 @@ function processExpression(array) {
                 processExpression(array); // Recursively process remaining operations
             }
         });
-
         return array[0]; // Return the final computed result
     }
 }
@@ -64,7 +62,11 @@ function getNumericInput(e) {
     let dataValue = e.target.dataset.value;
 
     // Reset the calculator if '=' was pressed before entering a new number
-    if (equalSignClicked && postEqualReset) ResetCalcOnEquals('', '');
+    if (equalSignClicked) ResetCalcOnEquals('', '');
+
+   // if toggle clicked after equalsignclikced, pass in '-'
+//    if (dataValue === '+/-' && )
+
 
     // Handle numeric and decimal inputs
     if (!isNaN(dataValue) || ((dataValue === '.') && (!currentNumberHolder.includes('.')))) {
@@ -94,11 +96,11 @@ function processOperatorAction(e) {
     let dataValue = e.target.dataset.value;
     numCounter = 0;
 
-    // Reset the calculator if '=' was pressed before entering a new operator
-    if (equalSignClicked && postEqualReset) ResetCalcOnEquals(finalResult, dataValue) // DataValue here is an operator
+    // Reset the calculator if '=' was pressed before entering a new operator. DataValue here is an operator
+    if (equalSignClicked) ResetCalcOnEquals(finalResult, dataValue) 
 
     // Handle operator input
-    if (['+', '-', '*', '/'].includes(dataValue) && !postEqualReset) {
+    if (['+', '-', '*', '/'].includes(dataValue) && !equalSignClicked) {
         if (['+', '-', '*', '/'].includes(expressionTracker.slice(-1))) {
             // Replace the last operator if an operator is already at the end
             expressionTracker = expressionTracker.slice(0, -1) + dataValue;
@@ -115,10 +117,10 @@ function processOperatorAction(e) {
         finalResult = finalResult.toFixed(2); // round off to 4 decimals
         resultSpan.textContent = finalResult; // Display the result
         equalSignClicked = true; // Mark that '=' has been pressed
-        postEqualReset = true; // Allow resetting after '=' is pressed
     }
 }
 
+// Function to toggle the sign (+/-) of the current input number
 function toggleSignValue() {
     expressionTracker = expressionTracker.slice(0, -currentNumberHolder.length);
     if (currentNumberHolder.at(0) !== '-') {
@@ -130,11 +132,11 @@ function toggleSignValue() {
     expressionSpan.textContent = expressionTracker;
 }
 
+// Function to reset the calculator after '=' is pressed
 function ResetCalcOnEquals(expSpanText, expTrackerUpdate) {
     expressionSpan.textContent = expSpanText;
     resultSpan.textContent = '';
     expressionTracker = expSpanText + expTrackerUpdate;
-    postEqualReset = false;
     equalSignClicked = false;
 }
 
