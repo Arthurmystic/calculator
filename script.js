@@ -64,25 +64,25 @@ function getNumericInput(e) {
     let dataValue = e.target.dataset.value;
 
     // Reset the calculator if '=' was pressed before entering a new number
-    if (equalSignClicked && postEqualReset) ResetCalcOnEquals('', '', '');
+    if (equalSignClicked && postEqualReset) ResetCalcOnEquals('', '');
 
     // Handle numeric and decimal inputs
     if (!isNaN(dataValue) || ((dataValue === '.') && (!currentNumberHolder.includes('.')))) {
-        expressionSpan.textContent += dataValue; // Append to the display
-        currentNumberHolder += dataValue; // Update the current number holder
-        expressionTracker += dataValue; // Append to the expression tracker
+        expressionSpan.textContent += dataValue; 
+        currentNumberHolder += dataValue; 
+        expressionTracker += dataValue; 
 
-    } else if (dataValue === 'DEL') { // Handle delete action
-        currentNumberHolder = currentNumberHolder.slice(0, -1); // Remove last character from the current number
-        expressionTracker = expressionTracker.slice(0, -1); // Remove last character from the expression tracker
-        expressionSpan.textContent = expressionTracker; // Update the display
-        resultSpan.textContent = ''; // Clear the result display
+    } else if (dataValue === 'DEL') { 
+        currentNumberHolder = currentNumberHolder.slice(0, -1); // Remove last characte
+        expressionTracker = expressionTracker.slice(0, -1); 
+        expressionSpan.textContent = expressionTracker; 
+        resultSpan.textContent = ''; 
 
-    } else if (dataValue === 'Clear') { // Handle clear action
-        expressionSpan.textContent = ''; // Clear the expression display
-        currentNumberHolder = ''; // Reset the current number holder
-        resultSpan.textContent = ''; // Clear the result display
-        expressionTracker = ''; // Reset the expression tracker
+    } else if (dataValue === 'Clear') {
+        expressionSpan.textContent = ''; 
+        currentNumberHolder = ''; 
+        resultSpan.textContent = ''; 
+        expressionTracker = ''; 
 
     } else if (dataValue === '+/-') {
         toggleSignValue();
@@ -95,8 +95,7 @@ function processOperatorAction(e) {
     numCounter = 0;
 
     // Reset the calculator if '=' was pressed before entering a new operator
-    if (equalSignClicked && postEqualReset) ResetCalcOnEquals(finalResult, '', finalResult + dataValue)
-    // Update expressionTracker with the last finalResult as the starting point and Append the new operator (dataValue) to the expression
+    if (equalSignClicked && postEqualReset) ResetCalcOnEquals(finalResult, dataValue) // DataValue here is an operator
 
     // Handle operator input
     if (['+', '-', '*', '/'].includes(dataValue) && !postEqualReset) {
@@ -131,10 +130,10 @@ function toggleSignValue() {
     expressionSpan.textContent = expressionTracker;
 }
 
-function ResetCalcOnEquals(expSpanText, resultText, expTrackerUpdate) {
+function ResetCalcOnEquals(expSpanText, expTrackerUpdate) {
     expressionSpan.textContent = expSpanText;
-    resultSpan.textContent = resultText;
-    expressionTracker = expTrackerUpdate;
+    resultSpan.textContent = '';
+    expressionTracker = expSpanText + expTrackerUpdate;
     postEqualReset = false;
     equalSignClicked = false;
 }
