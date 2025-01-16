@@ -14,7 +14,7 @@ let expressionTracker = ''; // Tracks the entire expression for evaluation and d
 
 let finalResult;   // Stores the result of the evaluated expression
 let equalSignClicked = false;  // Tracks if the equal sign has been pressed
-let symbolAfter;
+let isMinusAfterOperator; 
 
 // Function to perform basic arithmetic operations
 function operate(a, operator, b) {
@@ -28,32 +28,14 @@ function operate(a, operator, b) {
 }
 
 // Function to evaluate a single operation in the expression
-function evaluateSingleOperation(operator, operatorIndex, array, symbolAfter) {
+function evaluateSingleOperation(operator, operatorIndex, array, isMinusAfterOperator) {
     // Operands before & after the operator
     let valBefore = array[operatorIndex - 1];
-
-    // valBefore = valBefore ===undefined? 0: valBefore;
-
-    console.log(`vbvbvb valbefore: ${valBefore}`)
-
-    let valAfter;
-    valAfter = array[operatorIndex + 1];
-
-    console.log(symbolAfter);
-    /* if (symbolAfter===true){
-         console.log(`heeerrree`)
-         valAfter = Number('-' + array[operatorIndex + 2]); 
-     }else{
-         valAfter = array[operatorIndex + 1]; 
-     }*/
-
-    console.log(`operator : ${operator}, ${typeof operator}`)
-    console.log(`valAfter : ${valAfter}, ${typeof valAfter}`)
-    console.log(`__________________________`)
-
+    let valAfter = array[operatorIndex + 1];;
+    
+    if (isMinusAfterOperator===true) valAfter = Number('-' + array[operatorIndex + 2]); 
+    
     const answer = operate(valBefore, operator, valAfter); // Compute result
-    console.log(`ans ${answer}:  valbefore: ${valBefore}`)
-
     array.splice(operatorIndex - 1, 3, answer); // Replace the operation and operands with the result
     return answer;
 }
@@ -64,12 +46,13 @@ function processExpression(array) {
         // Handle multiplication and division first
         console.log(array);
         array.forEach((item, index, array) => {
+            
             if (item === '*' || item === '/') {
                 console.log(`array[index + 1] : ${array[index + 1]}, ${typeof array[index + 1]}, ${array[index]},${array}`)
 
-                // symbolAfter = (array[index + 1] === '-')? true: false;
+               isMinusAfterOperator = (array[index + 1] === '-')? true: false;
 
-                evaluateSingleOperation(item, index, array, symbolAfter);
+                evaluateSingleOperation(item, index, array, isMinusAfterOperator);
                 processExpression(array); // Recursively process remaining operations
             }
         });
@@ -77,12 +60,12 @@ function processExpression(array) {
         // Handle addition and subtraction
         array.forEach((item, index, array) => {
             if (item === '+' || item === '-') {
-                // symbolAfter = false;
-                evaluateSingleOperation(item, index, array, symbolAfter);
-                processExpression(array); // Recursively process remaining operations
+                isMinusAfterOperator = (array[index + 1] === '-')? true: false;
+                evaluateSingleOperation(item, index, array, isMinusAfterOperator);
+                processExpression(array); 
             }
         });
-        return array[0]; // Return the final computed result
+        return array[0]; 
     }
 }
 
@@ -92,13 +75,6 @@ function getNumericInput(e) {
 
     // Reset the calculator if '=' was pressed before entering a new number
     if (equalSignClicked) ResetCalcOnEquals('', '');
-
-    // if toggle clicked after equalsignclikced, pass in '-'
-    // if (dataValue === '+/-' && equalSignClicked) {
-    //     console.log(dataValue)
-    //     ResetCalcOnEquals('-', '')
-    // }
-
 
     // Handle numeric and decimal inputs
     if (!isNaN(dataValue) || ((dataValue === '.') && (!currentNumberHolder.includes('.')))) {
@@ -146,7 +122,9 @@ function processOperatorAction(e) {
         currentNumberHolder = ''; // Reset the current number holder
         expressionSpan.textContent = expressionTracker; // Update the display
 
-    } else if (dataValue === '=' && !equalSignClicked) evaluateEntireExpression();
+    } else if (dataValue === '=' && !equalSignClicked) {
+        evaluateEntireExpression();
+    }
 }
 
 
