@@ -121,9 +121,12 @@ function processOperatorAction(e) {
         let expressionTrackerArray = expressionTracker.split(/([-/+*])/); // Split the expression into operators and operands
         expressionTrackerArray = expressionTrackerArray.map((val) => (isNaN(Number(val)) ? val : Number(val))); // Convert operands to numbers
         finalResult = processExpression(expressionTrackerArray); // Compute the result
-        finalResult = finalResult//.toFixed(2); // round off to 4 decimals
-        
+
         removeEqualSignFromFinalResult();
+        console.log(`${finalResult}: ${typeof finalResult}`)
+        finalResult = finalResult.toFixed(2); // round off to 4 decimals
+        
+        
 
         resultSpan.textContent = finalResult; // Display the result
         equalSignClicked = true; // Mark that '=' has been pressed
@@ -156,7 +159,9 @@ function ResetCalcOnEquals(expSpanText, expTrackerUpdate) {
 
 function removeEqualSignFromFinalResult(){
     if (typeof finalResult === 'string' && finalResult.includes('=')){
-        finalResult = finalResult.replaceAll(/=/g,'');
+        finalResult = Number(finalResult.replaceAll(/=/g,''));
+     /*converts it back to number after removing '=' since 
+       addition of '=' had converted it into a string.*/
    }
 }
 
