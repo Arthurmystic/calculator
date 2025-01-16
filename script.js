@@ -63,9 +63,12 @@ function getNumericInput(e) {
 
     // Reset the calculator if '=' was pressed before entering a new number
     if (equalSignClicked) ResetCalcOnEquals('', '');
-
+        
    // if toggle clicked after equalsignclikced, pass in '-'
-//    if (dataValue === '+/-' && )
+    // if (dataValue === '+/-' && equalSignClicked) {
+    //     console.log(dataValue)
+    //     ResetCalcOnEquals('-', '')
+    // }
 
 
     // Handle numeric and decimal inputs
@@ -86,8 +89,12 @@ function getNumericInput(e) {
         resultSpan.textContent = ''; 
         expressionTracker = ''; 
 
-    } else if (dataValue === '+/-') {
+    } else if (dataValue === '+/-' && !equalSignClicked) {
         toggleSignValue();
+
+    } else if (dataValue === '+/-' && equalSignClicked) {
+        console.log(dataValue)
+        ResetCalcOnEquals('-', '')
     }
 }
 
@@ -114,10 +121,17 @@ function processOperatorAction(e) {
         let expressionTrackerArray = expressionTracker.split(/([-/+*])/); // Split the expression into operators and operands
         expressionTrackerArray = expressionTrackerArray.map((val) => (isNaN(Number(val)) ? val : Number(val))); // Convert operands to numbers
         finalResult = processExpression(expressionTrackerArray); // Compute the result
-        finalResult = finalResult.toFixed(2); // round off to 4 decimals
+        finalResult = finalResult//.toFixed(2); // round off to 4 decimals
+        
+        removeEqualSignFromFinalResult();
+
         resultSpan.textContent = finalResult; // Display the result
         equalSignClicked = true; // Mark that '=' has been pressed
-    }
+
+    }/*else if (dataValue === '+/-' && equalSignClicked) {
+             console.log(dataValue)
+            // ResetCalcOnEquals('-', '')*/
+         //}
 }
 
 // Function to toggle the sign (+/-) of the current input number
@@ -140,7 +154,13 @@ function ResetCalcOnEquals(expSpanText, expTrackerUpdate) {
     equalSignClicked = false;
 }
 
-// Add event listeners for numeric and operator inputs
+function removeEqualSignFromFinalResult(){
+    if (typeof finalResult === 'string' && finalResult.includes('=')){
+        finalResult = finalResult.replaceAll(/=/g,'');
+   }
+}
+
+
 numberPanel.addEventListener('click', getNumericInput);
 operatorPanel.addEventListener('click', processOperatorAction);
 
