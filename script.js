@@ -96,27 +96,17 @@ function getNumericInput(e) {
         currentNumberHolder = '';
         resultSpan.textContent = '';
         expressionTracker = '';
+        console.clear();
 
     } else if (dataValue === '+/-' && !equalSignClicked) {
-       // isToggleAfterEquals = false;
-        toggleSignValue();
+       isToggleAfterEquals = false;
+       toggleSignValue();
+       //flipSign(currentNumberHolder);
 
     } else if (dataValue === '+/-' && equalSignClicked) {
-       // isToggleAfterEquals = true;
+       isToggleAfterEquals = true;
+       toggleSignValue()
 
-        currentNumberHolder = finalResult;
-
-        if (currentNumberHolder.at(0) !== '-') {
-            currentNumberHolder = '-'.concat(currentNumberHolder);
-
-        } else if (currentNumberHolder.at(0) === '-') {
-            currentNumberHolder = currentNumberHolder.slice(1);
-        }
-
-        expressionTracker = currentNumberHolder;
-        expressionSpan.textContent = expressionTracker;
-        finalResult = currentNumberHolder
-        resultSpan.textContent = '';
     }
 }
 
@@ -158,20 +148,25 @@ function evaluateEntireExpression() {
     equalSignClicked = true;
 
     //expressionSpan.textContent = isNaN(expressionSpan.textContent)?'': expressionSpan.textContent;
-
-
 }
 
 // Function to toggle the sign (+/-) of the current input number
 function toggleSignValue() {
-    expressionTracker = expressionTracker.slice(0, -currentNumberHolder.length);
-    if (currentNumberHolder.at(0) !== '-') {
-        currentNumberHolder = '-'.concat(currentNumberHolder);
-    } else if (currentNumberHolder.at(0) === '-') {
-        currentNumberHolder = currentNumberHolder.slice(1);
+    if (isToggleAfterEquals) {
+        expressionTracker = flipSign(finalResult);
+        finalResult = expressionTracker;
+        resultSpan.textContent = '';
+
+    } else {
+        expressionTracker = expressionTracker.slice(0, -currentNumberHolder.length);
+        currentNumberHolder = flipSign(currentNumberHolder);
+        expressionTracker += currentNumberHolder;
     }
-    expressionTracker += currentNumberHolder;
     expressionSpan.textContent = expressionTracker;
+}
+
+function flipSign(numberString){
+    return (numberString.at(0) !== '-')? '-'.concat(numberString): numberString.slice(1);
 }
 
 function ResetCalcOnEquals(expSpanText, expTrackerUpdate) {
