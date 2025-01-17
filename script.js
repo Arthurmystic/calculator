@@ -14,7 +14,9 @@ let expressionTracker = ''; // Tracks the entire expression for evaluation and d
 
 let finalResult;   // Stores the result of the evaluated expression
 let equalSignClicked = false;  // Tracks if the equal sign has been pressed
-let isMinusAfterOperator; 
+let isMinusAfterOperator;
+let isToggleAfterEquals;
+let tempResultHolder = [];
 
 // Function to perform basic arithmetic operations
 function operate(a, operator, b) {
@@ -32,9 +34,9 @@ function evaluateSingleOperation(operator, operatorIndex, array, isMinusAfterOpe
     // Operands before & after the operator
     let valBefore = array[operatorIndex - 1];
     let valAfter = array[operatorIndex + 1];;
-    
-    if (isMinusAfterOperator===true) valAfter = Number('-' + array[operatorIndex + 2]); 
-    
+
+    if (isMinusAfterOperator) valAfter = Number('-' + array[operatorIndex + 2]);
+
     const answer = operate(valBefore, operator, valAfter); // Compute result
     array.splice(operatorIndex - 1, 3, answer); // Replace the operation and operands with the result
     return answer;
@@ -44,14 +46,11 @@ function evaluateSingleOperation(operator, operatorIndex, array, isMinusAfterOpe
 function processExpression(array) {
     if (array.length > 0) {
         // Handle multiplication and division first
-        console.log(array);
         array.forEach((item, index, array) => {
-            
             if (item === '*' || item === '/') {
                 console.log(`array[index + 1] : ${array[index + 1]}, ${typeof array[index + 1]}, ${array[index]},${array}`)
 
-               isMinusAfterOperator = (array[index + 1] === '-')? true: false;
-
+                isMinusAfterOperator = (array[index + 1] === '-') ? true : false;
                 evaluateSingleOperation(item, index, array, isMinusAfterOperator);
                 processExpression(array); // Recursively process remaining operations
             }
@@ -60,12 +59,12 @@ function processExpression(array) {
         // Handle addition and subtraction
         array.forEach((item, index, array) => {
             if (item === '+' || item === '-') {
-                isMinusAfterOperator = (array[index + 1] === '-')? true: false;
+                isMinusAfterOperator = (array[index + 1] === '-') ? true : false;
                 evaluateSingleOperation(item, index, array, isMinusAfterOperator);
-                processExpression(array); 
+                processExpression(array);
             }
         });
-        return array[0]; 
+        return array[0];
     }
 }
 
@@ -74,7 +73,11 @@ function getNumericInput(e) {
     let dataValue = e.target.dataset.value;
 
     // Reset the calculator if '=' was pressed before entering a new number
-    if (equalSignClicked) ResetCalcOnEquals('', '');
+    if (equalSignClicked && dataValue !== '+/-') {
+        ResetCalcOnEquals('', '');
+    }
+
+    console.log(`--- 1 ----- ${finalResult} -----------`)
 
     // Handle numeric and decimal inputs
     if (!isNaN(dataValue) || ((dataValue === '.') && (!currentNumberHolder.includes('.')))) {
@@ -95,11 +98,25 @@ function getNumericInput(e) {
         expressionTracker = '';
 
     } else if (dataValue === '+/-' && !equalSignClicked) {
+       // isToggleAfterEquals = false;
         toggleSignValue();
 
     } else if (dataValue === '+/-' && equalSignClicked) {
-        console.log(dataValue)
-        ResetCalcOnEquals('-', '')
+       // isToggleAfterEquals = true;
+
+        currentNumberHolder = finalResult;
+
+        if (currentNumberHolder.at(0) !== '-') {
+            currentNumberHolder = '-'.concat(currentNumberHolder);
+
+        } else if (currentNumberHolder.at(0) === '-') {
+            currentNumberHolder = currentNumberHolder.slice(1);
+        }
+
+        expressionTracker = currentNumberHolder;
+        expressionSpan.textContent = expressionTracker;
+        finalResult = currentNumberHolder
+        resultSpan.textContent = '';
     }
 }
 
@@ -112,7 +129,7 @@ function processOperatorAction(e) {
     if (equalSignClicked) ResetCalcOnEquals(finalResult, dataValue)
 
     // Handle operator input
-    if (['+', '-', '*', '/'].includes(dataValue) && !equalSignClicked) {
+    if (['+', '-', '*', '/'].includes(dataValue)) {
         if (['+', '-', '*', '/'].includes(expressionTracker.slice(-1))) {
             // Replace the last operator if an operator is already at the end
             expressionTracker = expressionTracker.slice(0, -1) + dataValue;
@@ -122,7 +139,7 @@ function processOperatorAction(e) {
         currentNumberHolder = ''; // Reset the current number holder
         expressionSpan.textContent = expressionTracker; // Update the display
 
-    } else if (dataValue === '=' && !equalSignClicked) {
+    } else if (dataValue === '=') {
         evaluateEntireExpression();
     }
 }
@@ -130,13 +147,19 @@ function processOperatorAction(e) {
 
 function evaluateEntireExpression() {
     let exprTrackerArray = expressionTracker.split(/([-/+*])/); // Split the expression into operators and operands
-    exprTrackerArray = exprTrackerArray.filter((val, index) => (val !== '' || index === 0)) //remove all '' except if they are at index 0. the ones at index 0 are to be converted to 0 in next step (map)
+    exprTrackerArray = exprTrackerArray.filter((val, index) => (val !== '' || index === 0)) //remove all '' except if they are at index 0, which are to be converted to 0 in next step (map)
         .map((val) => (isNaN(Number(val)) ? val : Number(val))); // Convert operands to numbers
     finalResult = processExpression(exprTrackerArray); // Compute the result
     removeEqualSignFromFinalResult();
-    finalResult = finalResult.toFixed(2); // round off to 4 decimals
-    resultSpan.textContent = finalResult; // Display the result
-    equalSignClicked = true; // Mark that '=' has been pressed
+
+    finalResult = finalResult.toFixed(2);
+    resultSpan.textContent = finalResult;
+    //resultSpan.textContent = isNaN(finalResult)?'': finalResult;  
+    equalSignClicked = true;
+
+    //expressionSpan.textContent = isNaN(expressionSpan.textContent)?'': expressionSpan.textContent;
+
+
 }
 
 // Function to toggle the sign (+/-) of the current input number
