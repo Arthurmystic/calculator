@@ -48,8 +48,6 @@ function processExpression(array) {
         // Handle multiplication and division first
         array.forEach((item, index, array) => {
             if (item === '*' || item === '/') {
-                console.log(`array[index + 1] : ${array[index + 1]}, ${typeof array[index + 1]}, ${array[index]},${array}`)
-
                 isMinusAfterOperator = (array[index + 1] === '-') ? true : false;
                 evaluateSingleOperation(item, index, array, isMinusAfterOperator);
                 processExpression(array); // Recursively process remaining operations
@@ -76,8 +74,6 @@ function getNumericInput(e) {
     if (equalSignClicked && dataValue !== '+/-') {
         ResetCalcOnEquals('', '');
     }
-
-    console.log(`--- 1 ----- ${finalResult} -----------`)
 
     // Handle numeric and decimal inputs
     if (!isNaN(dataValue) || ((dataValue === '.') && (!currentNumberHolder.includes('.')))) {
@@ -106,7 +102,6 @@ function getNumericInput(e) {
     } else if (dataValue === '+/-' && equalSignClicked) {
        isToggleAfterEquals = true;
        toggleSignValue()
-
     }
 }
 
@@ -141,18 +136,33 @@ function evaluateEntireExpression() {
         .map((val) => (isNaN(Number(val)) ? val : Number(val))); // Convert operands to numbers
     finalResult = processExpression(exprTrackerArray); // Compute the result
     removeEqualSignFromFinalResult();
+    // finalResult = finalResult.toFixed(2);
+    // resultSpan.textContent = finalResult; 
+    finalResult = String(finalResult);
 
-    finalResult = finalResult.toFixed(2);
-    resultSpan.textContent = finalResult;
+
+    //  tempResultHolder.push(finalResult);
+    // console.log(tempResultHolder);
+    // tempResultHolder.splice(1);
+    // finalResult = tempResultHolder[0];
+    // console.log(finalResult);
+
+    /* if (tempResultHolder.some((val=>isNaN(val)))) {
+        tempResultHolder.splice(1);
+        finalResult = tempResultHolder[0];
+        console.log(finalResult);
+    }*/ 
+    
+
+    resultSpan.textContent = Number(finalResult).toFixed(2);
     //resultSpan.textContent = isNaN(finalResult)?'': finalResult;  
     equalSignClicked = true;
 
-    //expressionSpan.textContent = isNaN(expressionSpan.textContent)?'': expressionSpan.textContent;
 }
 
 // Function to toggle the sign (+/-) of the current input number
 function toggleSignValue() {
-    if (isToggleAfterEquals) {
+    if (isToggleAfterEquals) {       
         expressionTracker = flipSign(finalResult);
         finalResult = expressionTracker;
         resultSpan.textContent = '';
@@ -161,6 +171,7 @@ function toggleSignValue() {
         expressionTracker = expressionTracker.slice(0, -currentNumberHolder.length);
         currentNumberHolder = flipSign(currentNumberHolder);
         expressionTracker += currentNumberHolder;
+        
     }
     expressionSpan.textContent = expressionTracker;
 }
