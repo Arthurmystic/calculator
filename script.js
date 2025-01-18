@@ -32,24 +32,20 @@ function operate(a, operator, b) {
     return ans[operator](a, b); // Dynamically calls the corresponding operation
 }
 
-// Function to evaluate a single operation in the expression
-function evaluateSingleOperation(operator, operatorIndex, array, isMinusAfterOperator) {
-    // Operands before & after the operator
-    let valBefore = array[operatorIndex - 1];
-    let valAfter = array[operatorIndex + 1];;
-
-    if (isMinusAfterOperator) valAfter = Number('-' + array[operatorIndex + 2]);
-
-    const answer = operate(valBefore, operator, valAfter); // Compute result
-    array.splice(operatorIndex - 1, 3, answer); // Replace the operation and operands with the result
-    return answer;
-}
-
 function handleSymbols(array, symbolArray){
     array.forEach((item, index, array) => {
         if (symbolArray.includes(item)){
             isMinusAfterOperator = (array[index + 1] === '-') ? true : false;
-            evaluateSingleOperation(item, index, array, isMinusAfterOperator);
+
+            // Operands before & after the operator
+            let valBefore = array[index - 1];
+            let valAfter = array[index + 1];;
+
+            if (isMinusAfterOperator) valAfter = Number('-' + array[index + 2]);
+
+            const answer = operate(valBefore, item, valAfter); // Compute result
+            array.splice(index - 1, 3, answer); // Replace the operation and operands with the result
+
             processExpression(array); // Recursively process remaining operations
         }
     });
