@@ -28,6 +28,7 @@ function operate(a, operator, b) {
         '%': (a, b) => (b === undefined) ? a / 100 : a % b,
         '^':(a,b) => Math.pow(a,b),  
     };
+
     return ans[operator](a, b); // Dynamically calls the corresponding operation
 }
 
