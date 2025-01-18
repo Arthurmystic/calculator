@@ -24,9 +24,9 @@ function operate(a, operator, b) {
         '+': (a, b) => a + b,
         '-': (a, b) => a - b,
         '*': (a, b) => a * b,
-        '/': (a, b) => a / b,
+        '÷': (a, b) => a / b,
         '%': (a, b) => (b === undefined) ? a / 100 : a % b,
-        'pow':(a,b) => Math.pow(a,b),  
+        '^':(a,b) => Math.pow(a,b),  
     };
     console.log(`a: ${a}, %: ${operator}, b: ${b}`);
     return ans[operator](a, b); // Dynamically calls the corresponding operation
@@ -51,13 +51,13 @@ function handleSymbols(array, symbolArray){
     });
 }
 
-// Function to process the entire expression, respecting operator precedence
+// Function to process the entire expression, based on operator precedence
 function processExpression(array) {
     if (array.length > 0) {
-        highPrecedenceOperators = ['pow']
+        highPrecedenceOperators = ['^'] // Exponential (Power)
         handleSymbols (array, highPrecedenceOperators)
     
-        midPrecedenceOperators = ['*','/','%']
+        midPrecedenceOperators = ['*','÷','%']
         handleSymbols (array, midPrecedenceOperators)
     
         lowPrecedenceOperators = ['+','-']
@@ -115,8 +115,8 @@ function processOperatorAction(e) {
     if (equalSignClicked) ResetCalcOnEquals(finalResult, dataValue)
 
     // Handle operator input
-    if (['+', '-', '*', '/','%'].includes(dataValue)) {
-        if (['+', '-', '*', '/','%'].includes(expressionTracker.slice(-1))) {
+    if (['+', '-', '*', '÷','%','^'].includes(dataValue)) {
+        if (['+', '-', '*', '÷','%','^'].includes(expressionTracker.slice(-1))) {
             // Replace the last operator if an operator is already at the end
             expressionTracker = expressionTracker.slice(0, -1) + dataValue;
         } else {
@@ -131,7 +131,7 @@ function processOperatorAction(e) {
 }
 
 function evaluateEntireExpression() {
-    let exprTrackerArray = expressionTracker.split(/([-/+*%])/); // Split the expression into operators and operands
+    let exprTrackerArray = expressionTracker.split(/([-÷+*%^])/); // Split the expression into operators and operands
     exprTrackerArray = exprTrackerArray.filter((val, index) => (val !== '' || index === 0)) //remove all '' except if they are at index 0, which are to be converted to 0 in next step (map)
         .map((val) => (isNaN(Number(val)) ? val : Number(val))); // Convert operands to numbers
     finalResult = processExpression(exprTrackerArray); // Compute the result
