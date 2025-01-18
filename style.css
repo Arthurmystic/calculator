@@ -34,7 +34,7 @@ header, footer{
 
 div {
     display: flex;
-    border-radius: 8px;
+    border-radius: 20px;
 }
 
 #calculatorFrame {
@@ -51,7 +51,7 @@ div {
 #displayPanel {
     height: 50px;
     background: linear-gradient(to bottom, #f2f8fc, #dbe9f5);
-    padding: 8px;
+    padding: 2px;
     border: 1px solid #a3b9cf;
     flex: 0.25;
     display: flex;
@@ -69,14 +69,14 @@ div {
     flex: 1;
     text-align: right;
     color: #8a6700; 
-    
+    padding: 5px;
     font-family: 'Playfair Display', serif;
     font-weight: bold;
     font-size: 1.5em;
     word-wrap: break-word;
     width: 370px;
     background-color: #fff1b3; 
-    
+    border-radius: 20px;
 }
 
 #resultSpan {
@@ -87,7 +87,9 @@ div {
     background-color: #fff4cc; 
     font-family: 'Playfair Display', serif;
     font-weight: bold;
-    font-size: 1.8em;   
+    font-size: 1.8em;  
+    border-radius: 20px; 
+    padding: 5px;
 }
 
 #scientificFunctionPanel {
