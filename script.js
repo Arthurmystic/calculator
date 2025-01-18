@@ -26,8 +26,9 @@ function operate(a, operator, b) {
         '*': (a, b) => a * b,
         '/': (a, b) => a / b,
         '%': (a, b) => a % b,
-        
+        'pow':(a,b) => Math.pow(a,b),  
     };
+    console.log(`a: ${a}, %: ${operator}, b: ${b}`);
     return ans[operator](a, b); // Dynamically calls the corresponding operation
 }
 
@@ -49,7 +50,7 @@ function processExpression(array) {
     if (array.length > 0) {
         // Handle multiplication and division first
         array.forEach((item, index, array) => {
-            if (item === '*' || item === '/') {
+            if (item === '*' || item === '/' || item === '%') {
                 isMinusAfterOperator = (array[index + 1] === '-') ? true : false;
                 evaluateSingleOperation(item, index, array, isMinusAfterOperator);
                 processExpression(array); // Recursively process remaining operations
@@ -75,6 +76,7 @@ function getNumericInput(e) {
     // Reset the calculator if '=' was pressed before entering a new number
     if (equalSignClicked && dataValue !== '+/-') {
         ResetCalcOnEquals('', '');
+        currentNumberHolder = '';
     }
 
     // Handle numeric and decimal inputs
@@ -116,8 +118,8 @@ function processOperatorAction(e) {
     if (equalSignClicked) ResetCalcOnEquals(finalResult, dataValue)
 
     // Handle operator input
-    if (['+', '-', '*', '/'].includes(dataValue)) {
-        if (['+', '-', '*', '/'].includes(expressionTracker.slice(-1))) {
+    if (['+', '-', '*', '/','%'].includes(dataValue)) {
+        if (['+', '-', '*', '/','%'].includes(expressionTracker.slice(-1))) {
             // Replace the last operator if an operator is already at the end
             expressionTracker = expressionTracker.slice(0, -1) + dataValue;
         } else {
@@ -131,9 +133,8 @@ function processOperatorAction(e) {
     }
 }
 
-
 function evaluateEntireExpression() {
-    let exprTrackerArray = expressionTracker.split(/([-/+*])/); // Split the expression into operators and operands
+    let exprTrackerArray = expressionTracker.split(/([-/+*%])/); // Split the expression into operators and operands
     exprTrackerArray = exprTrackerArray.filter((val, index) => (val !== '' || index === 0)) //remove all '' except if they are at index 0, which are to be converted to 0 in next step (map)
         .map((val) => (isNaN(Number(val)) ? val : Number(val))); // Convert operands to numbers
     finalResult = processExpression(exprTrackerArray); // Compute the result
@@ -165,7 +166,9 @@ function evaluateEntireExpression() {
 // Function to toggle the sign (+/-) of the current input number
 function toggleSignValue() {
     if (isToggleAfterEquals) {       
-        expressionTracker = flipSign(finalResult);
+        currentNumberHolder = finalResult;
+        currentNumberHolder = flipSign(currentNumberHolder);
+        expressionTracker = currentNumberHolder;
         finalResult = expressionTracker;
         resultSpan.textContent = '';
 
@@ -173,7 +176,6 @@ function toggleSignValue() {
         expressionTracker = expressionTracker.slice(0, -currentNumberHolder.length);
         currentNumberHolder = flipSign(currentNumberHolder);
         expressionTracker += currentNumberHolder;
-        
     }
     expressionSpan.textContent = expressionTracker;
 }
