@@ -10,9 +10,26 @@ html {
 
 body {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     height: 100vh;
-    padding: 20px;
+    padding: 5px;
+    /* border: 2px solid black; */
+    background: #f3e7fa;
+}
+header, footer{
+    flex: 0.05;
+    font-family: 'Raleway', sans-serif;
+    /* border: 2px solid red; */
+    align-content: center;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.3em;
+    background: #f8d5c4;
+    margin: 5px;
+
 }
 
 div {
