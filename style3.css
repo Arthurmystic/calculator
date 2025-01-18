@@ -8,123 +8,169 @@ html {
     box-sizing: inherit;
 }
 
-body{
+body {
     display: flex;
     justify-content: center;
     height: 100vh;
-    /* border: 2px solid black; */
-    /* margin: 10px; */
     padding: 20px;
 }
-div{
+
+div {
     display: flex;
-    /* border: 1px solid #dee2e6; */
     border-radius: 8px;
-    /* flex: 1 1 0; */
 }
 
-#calculatorFrame{
+#calculatorFrame {
     max-width: 420px;
-    border: 5px solid #dcdcdc;
-    background: #f5f5f5;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 5px solid #5b7380;
+    background: #f9fafb;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     gap: 10px;
     padding: 10px;
     flex-direction: column;
     flex: 1;
-    
 }
-#displayPanel{
-    height:50px;
-    background: #dcdcdc;
+
+#displayPanel {
+    height: 50px;
+    background: linear-gradient(to bottom, #f2f8fc, #dbe9f5);
     padding: 8px;
-    border: 1px solid #c0c0c0;
+    border: 1px solid #a3b9cf;
     flex: 0.25;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
 }
 
-#expressionDisplay, #resultDisplay{
-    font-family: Roboto, sans-serif;
-    font-weight: bold;
-    font-size: 1.5em;
-    /* max-width: 500px; */
-    text-align: right;
-    color: #333333;
+#expressionDisplay, #resultDisplay {
     flex: 1;
-    background-color: white;
+    background-color: #ffffff;
     display: flex;
 }
-#expressionSpan{
+
+#expressionSpan {
+    flex: 1;
+    text-align: right;
+    color: #8a6700; 
+    
+    font-family: 'Playfair Display', serif;
+    font-weight: bold;
+    font-size: 1.5em;
     word-wrap: break-word;
     width: 370px;
+    background-color: #fff1b3; 
+    
 }
 
-#scientificFunctionPanel{
-    height:200px;
-    background: linear-gradient(to bottom, #f8f9fa, #e6e6e6);
+#resultSpan {
+    flex: 1;
+    text-align: right;
+    align-items: center;
+    color: #a67900; 
+    background-color: #fff4cc; 
+    font-family: 'Playfair Display', serif;
+    font-weight: bold;
+    font-size: 1.8em;
+    
+}
+
+
+#scientificFunctionPanel {
+    height: 200px;
+    background: linear-gradient(to bottom, #f0f3f9, #dae1ec);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: #007bff;
-    border: 2px solid #dcdcdc;
+    color: #1e5875;
+    border: 2px solid #5b7380;
     flex: 0.4;
 }
-#scientificFunctionPanel:hover{
-    background: #e6e6e6;
-    color: #444444;
-    border: 2px solid #dcdcdc;
+
+#scientificFunctionPanel:hover {
+    background: #d6e1ed;
+    color: #103f5c;
+    border: 2px solid #4a5f70;
 }
 
-#mainInputPanel{
+#mainInputPanel {
     height: 450px;
     flex: 1;
     gap: 10px;
-    /* border: 2px solid greenyellow; */
 }
-#numberPanel{
+
+#numberPanel {
     flex: 5;
-    background: white;
-    /* border: 2px solid #dcdcdc; */
+    background: linear-gradient(to bottom, #ece6fa, #ffe8d9);
+    /* background: linear-gradient(to bottom, #fdf1f1, #ffe8d9); */
     display: flex;
     flex-direction: column;
 }
-#numberPanel:hover{
-    background: #ffd700;
+#numberPanel:hover {
+    background: linear-gradient(to right, #fbe4e5, #ffd7c0);
 }
 #operatorPanel {
     flex: 1;
-    background: white;
-    /* border: 2px solid #dee2e6; */
+    /* background: linear-gradient(to bottom, #ece6fa, #d9d4f5); */
+    background: linear-gradient(to bottom, #f5e2c1, #b3e1d8);
     display: flex;
     flex-direction: column;
 }
-#operatorPanel:hover{
-    background: #ffd700;
-    transition: background-color 0.3s,
+#operatorPanel:hover {
+    background: linear-gradient(to bottom, #e3dff7, #cdc9f1);
+    transition: background-color 0.3s;
 }
-
-.numberButtonRow{
+.numberButtonRow {
     flex: 1;
-    /* border: 1px solid blue; */
     display: flex;
 }
-.numberButton, .operatorButton{
+#utilityRow.numberButtonRow{
+    flex: 0.6;
+    background: linear-gradient(to top, #ece6fa, #d9d4f5);
+    /* background: linear-gradient(to top, #ece6fa, #d9d4f5); */
+}
+
+.numberButton, .operatorButton {
     flex: 1;
     font-size: 1.5em;
-    color: #333333;
-    border: 1px solid #c0c0c0;
+    color: #3c4753;
+    border: 1px solid #a3b9cf;
     margin: 4px;
     border-radius: 150px;
+    font-family: 'Bangers', cursive;
 }
-.numberButton:hover{
-    background: #cba135;
-    color: white;
-    transition: background-color 0.15s, color 0.15s;
-    
-}
-.operatorButton:hover{
-    background: #a33a2c;
-    color: white;
-    transition: background-color 0.15s, color 0.15s;
 
+/* #delete {
+    /* background: linear-gradient(to right, #e7fbf5, #c5efdc); 
+    background: linear-gradient(to right, #fbe4e5, #fbe4e9);
+} */
+
+button.numberButton:active{   /*, #specialNumberRow>#delete.numberButton:active {*/
+    background-color: #f8b6b6;
 }
+
+button.operatorButton:active {
+    background-color: #d4b5f9;
+}
+
+.numberButton:hover {
+    background: #fae2e2;
+    color: #3c4753;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.operatorButton:hover {
+    background: #e6dbf9;
+    color: #3c4753;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+#equals {
+    /* background: linear-gradient(to right, #ffebb4, #ffdc8c);  */
+    /* background: #50C878; */
+    background: linear-gradient(to right, #e7fbf5, #c5efdc);
+}
+
+
+
+
+/* #toggleSign {
+    background: linear-gradient(to right, #e7fbf5, #c5efdc);
+} */

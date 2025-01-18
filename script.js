@@ -25,6 +25,8 @@ function operate(a, operator, b) {
         '-': (a, b) => a - b,
         '*': (a, b) => a * b,
         '/': (a, b) => a / b,
+        '%': (a, b) => a % b,
+        
     };
     return ans[operator](a, b); // Dynamically calls the corresponding operation
 }
