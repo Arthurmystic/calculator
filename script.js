@@ -26,6 +26,7 @@ function operate(a, operator, b) {
         '*': (a, b) => a * b,
         '/': (a, b) => a / b,
         '%': (a, b) => a % b,
+        '%': (a, undefined) => a/100 ,
         'pow':(a,b) => Math.pow(a,b),  
     };
     console.log(`a: ${a}, %: ${operator}, b: ${b}`);
