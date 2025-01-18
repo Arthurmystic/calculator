@@ -25,8 +25,7 @@ function operate(a, operator, b) {
         '-': (a, b) => a - b,
         '*': (a, b) => a * b,
         '/': (a, b) => a / b,
-        '%': (a, b) => a % b,
-        '%': (a, undefined) => a/100 ,
+        '%': (a, b) => (b === undefined) ? a / 100 : a % b,
         'pow':(a,b) => Math.pow(a,b),  
     };
     console.log(`a: ${a}, %: ${operator}, b: ${b}`);
@@ -46,26 +45,27 @@ function evaluateSingleOperation(operator, operatorIndex, array, isMinusAfterOpe
     return answer;
 }
 
+function handleSymbols(array, symbolArray){
+    array.forEach((item, index, array) => {
+        if (symbolArray.includes(item)){
+            isMinusAfterOperator = (array[index + 1] === '-') ? true : false;
+            evaluateSingleOperation(item, index, array, isMinusAfterOperator);
+            processExpression(array); // Recursively process remaining operations
+        }
+    });
+}
+
 // Function to process the entire expression, respecting operator precedence
 function processExpression(array) {
     if (array.length > 0) {
-        // Handle multiplication and division first
-        array.forEach((item, index, array) => {
-            if (item === '*' || item === '/' || item === '%') {
-                isMinusAfterOperator = (array[index + 1] === '-') ? true : false;
-                evaluateSingleOperation(item, index, array, isMinusAfterOperator);
-                processExpression(array); // Recursively process remaining operations
-            }
-        });
-
-        // Handle addition and subtraction
-        array.forEach((item, index, array) => {
-            if (item === '+' || item === '-') {
-                isMinusAfterOperator = (array[index + 1] === '-') ? true : false;
-                evaluateSingleOperation(item, index, array, isMinusAfterOperator);
-                processExpression(array);
-            }
-        });
+        highPrecedenceOperators = ['pow']
+        handleSymbols (array, highPrecedenceOperators)
+    
+        midPrecedenceOperators = ['*','/','%']
+        handleSymbols (array, midPrecedenceOperators)
+    
+        lowPrecedenceOperators = ['+','-']
+        handleSymbols (array, lowPrecedenceOperators)
         return array[0];
     }
 }
