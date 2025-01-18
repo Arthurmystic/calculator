@@ -99,7 +99,6 @@ div {
 #numberPanel {
     flex: 5;
     background: linear-gradient(to bottom, #ece6fa, #ffe8d9);
-    /* background: linear-gradient(to bottom, #fdf1f1, #ffe8d9); */
     display: flex;
     flex-direction: column;
 }
@@ -108,7 +107,6 @@ div {
 }
 #operatorPanel {
     flex: 1;
-    /* background: linear-gradient(to bottom, #ece6fa, #d9d4f5); */
     background: linear-gradient(to bottom, #f5e2c1, #b3e1d8);
     display: flex;
     flex-direction: column;
@@ -124,7 +122,6 @@ div {
 #utilityRow.numberButtonRow{
     flex: 0.6;
     background: linear-gradient(to top, #ece6fa, #d9d4f5);
-    /* background: linear-gradient(to top, #ece6fa, #d9d4f5); */
 }
 
 .numberButton, .operatorButton {
@@ -137,12 +134,7 @@ div {
     font-family: 'Bangers', cursive;
 }
 
-/* #delete {
-    /* background: linear-gradient(to right, #e7fbf5, #c5efdc); 
-    background: linear-gradient(to right, #fbe4e5, #fbe4e9);
-} */
-
-button.numberButton:active{   /*, #specialNumberRow>#delete.numberButton:active {*/
+button.numberButton:active{   
     background-color: #f8b6b6;
 }
 
@@ -163,14 +155,5 @@ button.operatorButton:active {
 }
 
 #equals {
-    /* background: linear-gradient(to right, #ffebb4, #ffdc8c);  */
-    /* background: #50C878; */
     background: linear-gradient(to right, #e7fbf5, #c5efdc);
 }
-
-
-
-
-/* #toggleSign {
-    background: linear-gradient(to right, #e7fbf5, #c5efdc);
-} */
